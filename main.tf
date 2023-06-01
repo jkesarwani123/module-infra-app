@@ -4,5 +4,3 @@ resource "aws_instance" "test" {
   subnet_id = var.subnet_id
 }
 
-variable "instance_type" {}
-variable "subnet_id" {}
