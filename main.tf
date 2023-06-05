@@ -65,7 +65,7 @@ resource "aws_autoscaling_group" "asg" {
     }
 
   }
-
+# Add a Load balancer target group
 resource "aws_lb_target_group" "main" {
   name     = "${var.name}-${var.env}-tg"
   port     = var.app_port
@@ -73,4 +73,19 @@ resource "aws_lb_target_group" "main" {
   vpc_id   = var.vpc_id
   tags     = merge(var.tags, { Name = "${var.name}-${var.env}-tg" })
 }
+# Add a Load balancer listener rule - lesser number has higher priority
+resource "aws_lb_listener_rule" "rule" {
+  listener_arn = var.listener_arn
+  priority     = var.listener_priority
 
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.main.arn
+  }
+
+  condition {
+    host_header {
+      values = [local.dns_name]
+    }
+  }
+}
