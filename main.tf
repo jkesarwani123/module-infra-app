@@ -34,6 +34,7 @@ resource "aws_security_group" "sg" {
   tags = merge(var.tags, { Name = "${var.name}-${var.env}-sg" })
 }
 
+# Launch EC2 Instance template with security grp, IAM role, instance data
 resource "aws_launch_template" "template" {
   name          = "${var.name}-${var.env}-lt"
   image_id      = data.aws_ami.ami.id
